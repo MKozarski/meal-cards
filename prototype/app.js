@@ -159,32 +159,34 @@ function haversineMiles(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function classifyPlace(tags = {}) {
-  const name = (tags.name || "").toLowerCase();
-  const shop = (tags.shop || "").toLowerCase();
-  const cuisine = `${tags.cuisine || ""} ${name}`;
+const SPECIALTY_NAME_RE =
+  /asian|chinese|korean|japanese|vietnamese|thai|indian|oriental|h-?\s*mart|99\s*ranch|seafood city|uwajimaya|mitsuwa|super h|\bhindu\b|halal market|latin market|mercado/;
 
+function classifyPlace(tags = {}, displayName = "") {
+  const name = `${tags.name || ""} ${tags.brand || ""} ${displayName}`.toLowerCase();
+  const shop = (tags.shop || "").toLowerCase();
+
+  if (SPECIALTY_NAME_RE.test(name)) return "specialty";
+  if (shop === "wholesale" || /costco|sam'?s club|bj'?s/.test(name)) return "bulk";
   if (
-    /asian|chinese|korean|japanese|vietnamese|thai|indian|oriental|h-mart|hmart|99 ranch|seafood city|uwajimaya/.test(
-      cuisine
-    ) ||
-    shop === "seafood" ||
-    shop === "organic"
+    shop === "supermarket" ||
+    shop === "grocery" ||
+    shop === "convenience" ||
+    shop === "greengrocer" ||
+    shop === "department_store" ||
+    tags.amenity === "marketplace"
   ) {
-    // organic often full grocery — only force specialty on clear ethnic cues
-    if (/asian|chinese|korean|japanese|vietnamese|thai|indian|oriental|h-mart|hmart|99 ranch|seafood city|uwajimaya/.test(cuisine)) {
-      return "specialty";
-    }
-  }
-  if (/asian|chinese|korean|japanese|vietnamese|thai|indian|oriental|h-mart|hmart|99 ranch/.test(name)) {
-    return "specialty";
-  }
-  if (shop === "supermarket" || shop === "grocery" || shop === "convenience" || tags.amenity === "marketplace") {
     return "main";
   }
-  if (shop === "wholesale" || /costco|sam'?s club|bj'?s/.test(name)) return "bulk";
+  if (/publix|walmart|aldi|kroger|safeway|food lion|winn-?dixie|trader joe|whole foods|target|heb|meijer|weismann|wegmans|harris teeter|sprouts|lidl|giant|stop\s*&?\s*shop/.test(name)) {
+    return "main";
+  }
   if (shop) return "main";
   return "main";
+}
+
+function placeDisplayName(tags = {}) {
+  return tags.name || tags.brand || tags["name:en"] || tags.operator || null;
 }
 
 async function geocodeZip(zip) {
@@ -216,36 +218,28 @@ async function geocodeZip(zip) {
   };
 }
 
-async function fetchNearbyPlaces(lat, lon, radiusM = 8000) {
-  const query = `
-    [out:json][timeout:25];
-    (
-      node["shop"~"supermarket|grocery|convenience|wholesale|greengrocer"](around:${radiusM},${lat},${lon});
-      way["shop"~"supermarket|grocery|convenience|wholesale|greengrocer"](around:${radiusM},${lat},${lon});
-      node["name"~"H-Mart|H Mart|99 Ranch|Publix|Walmart|Aldi|Trader Joe|Whole Foods|Kroger|Safeway|Food Lion|Winn-Dixie|Asian|Chinese|Korean|Japanese",i](around:${radiusM},${lat},${lon});
-      way["name"~"H-Mart|H Mart|99 Ranch|Publix|Walmart|Aldi|Trader Joe|Whole Foods|Kroger|Safeway|Food Lion|Winn-Dixie",i](around:${radiusM},${lat},${lon});
-    );
-    out center tags 40;
-  `;
-  const res = await fetch("https://overpass-api.de/api/interpreter", {
-    method: "POST",
-    body: query,
-    headers: { "Content-Type": "text/plain", "User-Agent": OSM_UA },
-  });
-  if (!res.ok) throw new Error("Places lookup failed — try again in a moment");
-  const data = await res.json();
-  const places = (data.elements || [])
+const OVERPASS_ENDPOINTS = [
+  "https://overpass-api.de/api/interpreter",
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://overpass.nchc.org.tw/api/interpreter",
+];
+
+function normalizePlaces(rawList, lat, lon) {
+  const places = rawList
     .map((el) => {
-      const plat = el.lat ?? el.center?.lat;
-      const plon = el.lon ?? el.center?.lon;
+      const plat = el.lat ?? el.center?.lat ?? (el.geometry && el.geometry[0]?.lat);
+      const plon = el.lon ?? el.center?.lon ?? (el.geometry && el.geometry[0]?.lon);
       if (plat == null || plon == null) return null;
       const tags = el.tags || {};
-      if (!tags.name) return null;
-      const role = classifyPlace(tags);
+      const name = placeDisplayName(tags) || el.display_name?.split(",")[0];
+      if (!name) return null;
+      const role = classifyPlace(tags, name);
       const miles = haversineMiles(lat, lon, plat, plon);
+      // drop absurd outliers (bad geocode / world results)
+      if (miles > 40) return null;
       return {
-        id: `${el.type}/${el.id}`,
-        name: tags.name,
+        id: el.id != null ? `${el.type || "n"}/${el.id}` : `nom/${name}-${plat.toFixed(3)}`,
+        name,
         role,
         lat: plat,
         lon: plon,
@@ -255,16 +249,154 @@ async function fetchNearbyPlaces(lat, lon, radiusM = 8000) {
     })
     .filter(Boolean);
 
-  // dedupe by name+rounded miles
   const seen = new Set();
   const unique = [];
   for (const p of places.sort((a, b) => a.miles - b.miles)) {
-    const key = p.name.toLowerCase();
+    const key = p.name.toLowerCase().replace(/\s+/g, " ").trim();
     if (seen.has(key)) continue;
     seen.add(key);
     unique.push(p);
   }
   return unique;
+}
+
+async function fetchOverpassPlaces(lat, lon, radiusM) {
+  // Keep the query light — busy public Overpass servers time out on heavy regex.
+  const query = `
+[out:json][timeout:30];
+(
+  nwr["shop"="supermarket"](around:${radiusM},${lat},${lon});
+  nwr["shop"="grocery"](around:${radiusM},${lat},${lon});
+  nwr["shop"="convenience"](around:${radiusM},${lat},${lon});
+  nwr["shop"="wholesale"](around:${radiusM},${lat},${lon});
+  nwr["shop"="greengrocer"](around:${radiusM},${lat},${lon});
+  nwr["shop"="department_store"](around:${radiusM},${lat},${lon});
+  nwr["brand"~"Publix|Walmart|Aldi|Target|Kroger|Winn-Dixie|Trader Joe|Whole Foods|Costco|Lidl|H-E-B",i](around:${radiusM},${lat},${lon});
+);
+out center tags 60;
+`.trim();
+
+  let lastErr = null;
+  for (const endpoint of OVERPASS_ENDPOINTS) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 28000);
+      const res = await fetch(endpoint, {
+        method: "POST",
+        body: query,
+        headers: { "Content-Type": "text/plain", Accept: "application/json" },
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      const text = await res.text();
+      if (!res.ok) {
+        lastErr = new Error(`Overpass ${res.status}`);
+        continue;
+      }
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        lastErr = new Error("Overpass busy or returned non-JSON");
+        continue;
+      }
+      if (data.remark && !data.elements?.length) {
+        lastErr = new Error(data.remark);
+        continue;
+      }
+      return normalizePlaces(data.elements || [], lat, lon);
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error("Overpass unavailable");
+}
+
+/** Nominatim fallback when Overpass is empty/busy (common). */
+async function fetchNominatimGroceries(lat, lon, radiusMiles = 12) {
+  // viewbox: left, top, right, bottom
+  const dLat = radiusMiles / 69;
+  const dLon = radiusMiles / (Math.cos((lat * Math.PI) / 180) * 69);
+  const viewbox = [lon - dLon, lat + dLat, lon + dLon, lat - dLat].map((n) => n.toFixed(5)).join(",");
+
+  const queries = [
+    "supermarket",
+    "grocery store",
+    "Publix",
+    "Walmart",
+    "Aldi",
+    "Asian market",
+  ];
+
+  const collected = [];
+  for (const q of queries) {
+    const url =
+      `https://nominatim.openstreetmap.org/search?` +
+      new URLSearchParams({
+        q,
+        format: "json",
+        addressdetails: "0",
+        limit: "12",
+        viewbox,
+        bounded: "1",
+        countrycodes: "us",
+      });
+    try {
+      const res = await fetch(url, {
+        headers: { Accept: "application/json", "User-Agent": OSM_UA },
+      });
+      if (!res.ok) continue;
+      const rows = await res.json();
+      for (const row of rows) {
+        collected.push({
+          type: "nominatim",
+          id: row.place_id,
+          lat: parseFloat(row.lat),
+          lon: parseFloat(row.lon),
+          display_name: row.display_name,
+          tags: {
+            name: row.display_name?.split(",")[0],
+            shop: /market|asian|chinese|korean|thai|indian/i.test(row.display_name || "")
+              ? "grocery"
+              : "supermarket",
+          },
+        });
+      }
+      // Nominatim polite use: small pause between queries
+      await sleep(1100);
+    } catch {
+      /* try next query */
+    }
+  }
+  return normalizePlaces(collected, lat, lon);
+}
+
+async function fetchNearbyPlaces(lat, lon) {
+  const radii = [12000, 20000, 30000];
+  let overpassError = null;
+
+  for (const radiusM of radii) {
+    try {
+      const places = await fetchOverpassPlaces(lat, lon, radiusM);
+      if (places.length) return { places, source: "overpass", radiusM };
+    } catch (e) {
+      overpassError = e;
+    }
+  }
+
+  // Fallback: Nominatim text search in a bounding box
+  try {
+    const places = await fetchNominatimGroceries(lat, lon, 15);
+    if (places.length) return { places, source: "nominatim", radiusM: 24000 };
+  } catch (e) {
+    overpassError = overpassError || e;
+  }
+
+  return {
+    places: [],
+    source: "none",
+    error: overpassError?.message || "No grocery places found",
+  };
 }
 
 function pickStores(places) {
@@ -335,27 +467,35 @@ function resolveLocationFromDevice() {
 }
 
 async function loadPlacesForLocation(loc) {
-  setLocationStatus(`Looking up stores near ${loc.label}…`);
+  setLocationStatus(`Looking up stores near ${loc.label}… (may take ~10–20s)`);
   try {
-    const places = await fetchNearbyPlaces(loc.lat, loc.lon);
+    const { places, source, radiusM, error } = await fetchNearbyPlaces(loc.lat, loc.lon);
     const picks = pickStores(places);
     state.places = {
       all: places.slice(0, 25),
       picks,
+      source,
+      radiusM,
       fetchedAt: Date.now(),
+      error: error || null,
     };
     saveState();
     const n = places.length;
-    setLocationStatus(
-      n
-        ? `Found ${n} grocery spots near ${loc.label}. List routed below.`
-        : `No OSM groceries nearby — using generic stops for ${loc.label}.`
-    );
+    if (n) {
+      const via = source === "nominatim" ? " (map search fallback)" : "";
+      const mi = radiusM ? ` within ~${Math.round(radiusM / 1609)} mi` : "";
+      setLocationStatus(`Found ${n} grocery spots near ${loc.label}${mi}${via}. Routed below.`);
+    } else {
+      setLocationStatus(
+        `Still no stores found near ${loc.label}. ${error ? `(${error}) ` : ""}Using generic stops — try zip, or again in a minute if map servers are busy.`,
+        true
+      );
+    }
     renderRun();
   } catch (e) {
     state.places = { all: [], picks: { main: null, specialty: null }, error: e.message };
     saveState();
-    setLocationStatus(e.message + " Using generic stop names.", true);
+    setLocationStatus((e.message || "Lookup failed") + " — using generic stop names. Try again shortly.", true);
     renderRun();
   }
 }
