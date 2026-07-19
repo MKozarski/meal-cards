@@ -61,6 +61,16 @@
           </div>
           <div class="card-row" id="dealt-cards"></div>
           <p class="hint">Tap a card to flip for ingredients. Then stamp what you want to eat.</p>
+          <div class="similar-block" id="deal-similar-block" hidden>
+            <div class="section-head tight">
+              <div>
+                <p class="eyebrow">More like this</p>
+                <h3 class="subhead">Similar hands we can deal</h3>
+              </div>
+              <button type="button" class="btn btn-ghost" id="refresh-similar-deal">Shuffle</button>
+            </div>
+            <div class="card-row compact" id="deal-similar-cards"></div>
+          </div>
         </div>
       </section>
 
@@ -75,6 +85,16 @@
         </div>
         <p class="lede compact" id="want-empty-msg">Nothing cooking yet. Deal a hand, then stamp <strong>I want this</strong>.</p>
         <div class="card-row" id="want-cards"></div>
+        <div class="similar-block" id="want-similar-block" hidden>
+          <div class="section-head tight">
+            <div>
+              <p class="eyebrow">Because you want those</p>
+              <h3 class="subhead">Similar meal cards</h3>
+            </div>
+            <button type="button" class="btn btn-ghost" id="refresh-similar-want">Shuffle</button>
+          </div>
+          <div class="card-row compact" id="want-similar-cards"></div>
+        </div>
         <div class="library-block" id="library-block" hidden>
           <h3>Also in your hand</h3>
           <div class="card-row compact" id="library-cards"></div>
@@ -113,6 +133,18 @@
           </div>
           <button type="button" class="btn btn-ghost" id="copy-list-btn">Copy list</button>
         </div>
+
+        <div class="location-panel" id="location-panel">
+          <p class="eyebrow">Where are you shopping?</p>
+          <p class="lede compact">We’ll match ingredients to nearby store types — no account, no cart.</p>
+          <div class="location-row">
+            <input type="text" id="zip-input" class="zip-input" inputmode="numeric" maxlength="10" placeholder="Zip code" autocomplete="postal-code" />
+            <button type="button" class="btn btn-primary" id="find-stores-btn">Find stores</button>
+            <button type="button" class="btn btn-ghost" id="use-location-btn">Use my location</button>
+          </div>
+          <p class="hint" id="location-status">Enter a US zip or allow location. Prototype uses OpenStreetMap places.</p>
+        </div>
+
         <div class="run-summary" id="run-summary"></div>
         <div id="run-stops"></div>
         <p class="run-complete" id="run-complete" hidden>Run complete. Time to cook.</p>

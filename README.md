@@ -46,6 +46,10 @@ python3 -m http.server 8765
 
 Tap **Demo: Rice Robot page** to deal the photo-ingest fixture into two meal cards.
 
+**Also in the prototype**
+- **More like this** — similar meal cards from a local catalog (ranked by tags + ingredients)
+- **Start the run** — zip or device location → nearby groceries via OpenStreetMap; ingredients routed to main vs specialty stops
+
 Tone: playful kitchen. Shopping CTA: **Start the run** (subtitle: Shopping day).
 
 ## Status

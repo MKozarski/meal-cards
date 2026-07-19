@@ -1,0 +1,176 @@
+{
+  "catalog": [
+    {
+      "id": "sim-sausage-cajun-rice",
+      "title": "Cajun Sausage Rice",
+      "summary": "One-pot rice with smoked sausage, peppers, onion, and Cajun seasoning — dirty-rice energy without the liver.",
+      "source": "similar",
+      "method_tags": ["one-pot", "stovetop"],
+      "style_tags": ["cajun", "southern", "rice-bowl"],
+      "ingredients": [
+        { "name": "long grain white rice", "display": "1½ cups long grain white rice" },
+        { "name": "beef broth", "display": "3 cups beef or chicken broth" },
+        { "name": "smoked sausage", "display": "12 oz smoked sausage, sliced" },
+        { "name": "diced bell pepper", "display": "1 cup diced bell pepper" },
+        { "name": "onion", "display": "1 onion, diced" },
+        { "name": "Cajun seasoning", "display": "1–2 tbsp Cajun seasoning" }
+      ],
+      "steps": [
+        "Brown sausage and onion in a pot.",
+        "Add pepper, rice, broth, and seasoning; stir.",
+        "Simmer covered until rice is tender."
+      ]
+    },
+    {
+      "id": "sim-chicken-dirty-rice",
+      "title": "Chicken Dirty Rice",
+      "summary": "Ground chicken, holy trinity vibes, rice cooker friendly.",
+      "source": "similar",
+      "method_tags": ["rice-cooker", "one-pot"],
+      "style_tags": ["cajun", "southern", "rice-bowl"],
+      "ingredients": [
+        { "name": "long grain white rice", "display": "2 cups long grain white rice" },
+        { "name": "chicken broth", "display": "2½ cups chicken broth" },
+        { "name": "ground chicken", "display": "½ lb ground chicken, cooked" },
+        { "name": "diced bell pepper", "display": "½ cup diced bell pepper" },
+        { "name": "celery", "display": "½ cup diced celery" },
+        { "name": "Cajun seasoning", "display": "1 tbsp Cajun seasoning" }
+      ],
+      "steps": [
+        "Rinse rice until water runs clear.",
+        "Add everything to the rice cooker and stir.",
+        "Cook, fluff, hit with hot sauce."
+      ]
+    },
+    {
+      "id": "sim-jambalaya-lite",
+      "title": "Weeknight Jambalaya-Lite",
+      "summary": "Tomato-kissed rice with chicken or sausage — southern one-pot, meal-prep friendly.",
+      "source": "similar",
+      "method_tags": ["one-pot", "stovetop"],
+      "style_tags": ["cajun", "southern", "rice-bowl"],
+      "ingredients": [
+        { "name": "long grain white rice", "display": "1½ cups rice" },
+        { "name": "chicken broth", "display": "2½ cups chicken broth" },
+        { "name": "canned diced tomatoes", "display": "1 can diced tomatoes" },
+        { "name": "chicken thighs", "display": "1 lb chicken thighs, cubed" },
+        { "name": "diced bell pepper", "display": "1 bell pepper, diced" },
+        { "name": "Cajun seasoning", "display": "1 tbsp Cajun seasoning" }
+      ],
+      "steps": [
+        "Brown chicken with seasoning.",
+        "Add veg, rice, tomatoes, broth.",
+        "Simmer until rice is done."
+      ]
+    },
+    {
+      "id": "sim-kimchi-fried-rice",
+      "title": "Kimchi Fried Rice",
+      "summary": "Spicy leftover-rice classic with egg, kimchi, and sesame oil.",
+      "source": "similar",
+      "method_tags": ["stovetop", "one-pan"],
+      "style_tags": ["asian-inspired", "fried-rice", "rice-bowl"],
+      "ingredients": [
+        { "name": "cooked rice", "display": "3 cups day-old cooked rice" },
+        { "name": "kimchi", "display": "1 cup chopped kimchi" },
+        { "name": "large eggs", "display": "2 eggs" },
+        { "name": "green onion", "display": "2 green onions, sliced" },
+        { "name": "sesame oil", "display": "1 tbsp sesame oil" },
+        { "name": "soy sauce", "display": "1 tbsp soy sauce" },
+        { "name": "gochujang", "display": "1 tsp gochujang (optional)" }
+      ],
+      "steps": [
+        "Scramble eggs; set aside.",
+        "Stir-fry kimchi, add rice, sauces, oil.",
+        "Fold in eggs and green onion."
+      ]
+    },
+    {
+      "id": "sim-garlic-soy-pork-rice",
+      "title": "Garlic Soy Pork Rice",
+      "summary": "Rice cooker bowl with ground pork, garlic, soy, and frozen veg.",
+      "source": "similar",
+      "method_tags": ["rice-cooker", "one-pot"],
+      "style_tags": ["asian-inspired", "rice-bowl"],
+      "ingredients": [
+        { "name": "jasmine rice", "display": "2 cups jasmine rice" },
+        { "name": "water", "display": "2 cups water" },
+        { "name": "ground pork", "display": "½ lb ground pork, browned" },
+        { "name": "mixed vegetables", "display": "1 cup frozen mixed vegetables" },
+        { "name": "soy sauce", "display": "2 tbsp soy sauce" },
+        { "name": "garlic", "display": "3 cloves garlic, minced" },
+        { "name": "sesame oil", "display": "1 tsp sesame oil" }
+      ],
+      "steps": [
+        "Rinse rice.",
+        "Combine all in rice cooker.",
+        "Cook, fluff, drizzle sesame oil."
+      ]
+    },
+    {
+      "id": "sim-egg-tomato-rice",
+      "title": "Tomato Egg Rice",
+      "summary": "Comfort stir of tomatoes, scrambled egg, and hot rice — fast and cheap.",
+      "source": "similar",
+      "method_tags": ["stovetop", "one-pan"],
+      "style_tags": ["asian-inspired", "rice-bowl", "budget"],
+      "ingredients": [
+        { "name": "cooked rice", "display": "3 cups hot cooked rice" },
+        { "name": "large eggs", "display": "3 eggs, beaten" },
+        { "name": "tomatoes", "display": "2 tomatoes, chopped" },
+        { "name": "green onion", "display": "2 green onions" },
+        { "name": "soy sauce", "display": "1 tbsp soy sauce" },
+        { "name": "oil", "display": "2 tbsp cooking oil" }
+      ],
+      "steps": [
+        "Scramble eggs soft; remove.",
+        "Cook tomatoes until saucy; season.",
+        "Combine with rice and eggs."
+      ]
+    },
+    {
+      "id": "sim-coconut-curry-rice",
+      "title": "Coconut Curry Chickpea Rice",
+      "summary": "Creamy one-pot rice with coconut milk, curry, and chickpeas.",
+      "source": "similar",
+      "method_tags": ["one-pot", "stovetop"],
+      "style_tags": ["curry", "rice-bowl", "vegetarian"],
+      "ingredients": [
+        { "name": "jasmine rice", "display": "1½ cups jasmine rice" },
+        { "name": "coconut milk", "display": "1 can coconut milk" },
+        { "name": "water", "display": "1 cup water or broth" },
+        { "name": "chickpeas", "display": "1 can chickpeas, drained" },
+        { "name": "curry powder", "display": "1–2 tbsp curry powder" },
+        { "name": "frozen spinach", "display": "1 cup frozen spinach" },
+        { "name": "garlic", "display": "2 cloves garlic" }
+      ],
+      "steps": [
+        "Sauté garlic and curry powder.",
+        "Add rice, coconut milk, water, chickpeas.",
+        "Simmer; fold in spinach at the end."
+      ]
+    },
+    {
+      "id": "sim-spanish-rice-beef",
+      "title": "Skillet Spanish Rice",
+      "summary": "Tomato rice with ground beef, cumin, and peppers — weeknight staple.",
+      "source": "similar",
+      "method_tags": ["one-pot", "stovetop"],
+      "style_tags": ["mexican-inspired", "rice-bowl", "budget"],
+      "ingredients": [
+        { "name": "long grain white rice", "display": "1½ cups rice" },
+        { "name": "ground beef", "display": "½ lb ground beef" },
+        { "name": "diced tomatoes", "display": "1 can diced tomatoes" },
+        { "name": "beef broth", "display": "2 cups beef broth" },
+        { "name": "diced bell pepper", "display": "1 bell pepper" },
+        { "name": "cumin", "display": "1 tsp cumin" },
+        { "name": "chili powder", "display": "1 tsp chili powder" }
+      ],
+      "steps": [
+        "Brown beef and pepper.",
+        "Add rice, tomatoes, broth, spices.",
+        "Cover and simmer until tender."
+      ]
+    }
+  ]
+}
