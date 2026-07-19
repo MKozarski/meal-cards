@@ -34,9 +34,23 @@ No store setup wizards. No price dashboards. No grocery-cart logins.
 - [Project plan & requirements](docs/PROJECT.md)
 - [Data model sketch](docs/DATA_MODEL.md)
 
+## Prototype
+
+Interactive vertical slice (Deal → Want → Week → Run):
+
+```bash
+cd meal-cards
+python3 -m http.server 8765
+# open http://localhost:8765/prototype/
+```
+
+Tap **Demo: Rice Robot page** to deal the photo-ingest fixture into two meal cards.
+
+Tone: playful kitchen. Shopping CTA: **Start the run** (subtitle: Shopping day).
+
 ## Status
 
-Early planning. Repository created to hold product definition and upcoming prototype work.
+Product docs + photo fixture + clickable prototype.
 
 ## License
 

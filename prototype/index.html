@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Meal Cards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">♠</span>
+        <div>
+          <h1>Meal Cards</h1>
+          <p class="tagline">Deal · Want · Week · Run</p>
+        </div>
+      </div>
+      <nav class="phase-nav" aria-label="Phases">
+        <button type="button" class="phase-tab active" data-phase="deal">Deal</button>
+        <button type="button" class="phase-tab" data-phase="want">Want <span class="badge" id="want-badge" hidden>0</span></button>
+        <button type="button" class="phase-tab" data-phase="week">Week</button>
+        <button type="button" class="phase-tab" data-phase="run" id="run-tab" disabled>Run</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- DEAL -->
+      <section id="phase-deal" class="phase active" aria-label="Deal">
+        <div class="hero-panel" id="deal-empty">
+          <p class="eyebrow">Your table is clear</p>
+          <h2>Deal me a dish</h2>
+          <p class="lede">Snap a recipe page. We’ll split it into cards you can want, plan, and shop.</p>
+          <div class="cta-row">
+            <label class="btn btn-primary btn-xl file-btn">
+              <input type="file" id="photo-input" accept="image/*" capture="environment" hidden />
+              Deal me a dish
+            </label>
+            <button type="button" class="btn btn-ghost btn-xl" id="demo-deal">
+              Demo: Rice Robot page
+            </button>
+          </div>
+          <p class="hint">Tip: one photo can hold more than one recipe.</p>
+        </div>
+
+        <div class="deal-theater" id="deal-theater" hidden>
+          <div class="theater-deck" aria-hidden="true"></div>
+          <p class="theater-line" id="theater-line">Reading the page…</p>
+        </div>
+
+        <div class="hand-panel" id="hand-panel" hidden>
+          <div class="section-head">
+            <div>
+              <p class="eyebrow" id="hand-eyebrow">Nice hand</p>
+              <h2 id="hand-title">You’re holding 2</h2>
+            </div>
+            <button type="button" class="btn btn-primary" id="confirm-hand">Looks good</button>
+          </div>
+          <div class="card-row" id="dealt-cards"></div>
+          <p class="hint">Tap a card to flip for ingredients. Then stamp what you want to eat.</p>
+        </div>
+      </section>
+
+      <!-- WANT -->
+      <section id="phase-want" class="phase" aria-label="Want" hidden>
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Craving pile</p>
+            <h2>Want to eat</h2>
+          </div>
+          <button type="button" class="btn btn-ghost" id="to-week-from-want" disabled>Drop onto the week →</button>
+        </div>
+        <p class="lede compact" id="want-empty-msg">Nothing cooking yet. Deal a hand, then stamp <strong>I want this</strong>.</p>
+        <div class="card-row" id="want-cards"></div>
+        <div class="library-block" id="library-block" hidden>
+          <h3>Also in your hand</h3>
+          <div class="card-row compact" id="library-cards"></div>
+        </div>
+      </section>
+
+      <!-- WEEK -->
+      <section id="phase-week" class="phase" aria-label="Week" hidden>
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">This week’s hand</p>
+            <h2>Weekly timeline</h2>
+          </div>
+          <button type="button" class="btn btn-primary" id="start-run-btn" disabled>
+            Start the run
+            <span class="btn-sub">Shopping day</span>
+          </button>
+        </div>
+        <p class="lede compact">Drag from <strong>Want</strong> onto a day — or tap a craving, then tap a day.</p>
+
+        <div class="want-tray" id="week-want-tray" aria-label="Want tray">
+          <span class="tray-label">Want</span>
+          <div class="tray-cards" id="week-want-cards"></div>
+        </div>
+
+        <div class="week-board" id="week-board"></div>
+        <p class="toast" id="week-toast" hidden></p>
+      </section>
+
+      <!-- RUN -->
+      <section id="phase-run" class="phase" aria-label="Run" hidden>
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Shopping day</p>
+            <h2>Start the run</h2>
+          </div>
+          <button type="button" class="btn btn-ghost" id="copy-list-btn">Copy list</button>
+        </div>
+        <div class="run-summary" id="run-summary"></div>
+        <div id="run-stops"></div>
+        <p class="run-complete" id="run-complete" hidden>Run complete. Time to cook.</p>
+      </section>
+    </main>
+
+    <div class="day-picker" id="day-picker" hidden>
+      <p>Park it on…</p>
+      <div class="day-picker-row" id="day-picker-row"></div>
+      <button type="button" class="btn btn-ghost" id="day-picker-cancel">Cancel</button>
+    </div>
+  </div>
+  <script src="app.js" type="module"></script>
+</body>
+</html>
