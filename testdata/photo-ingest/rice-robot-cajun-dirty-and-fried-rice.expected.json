@@ -1,0 +1,133 @@
+{
+  "fixture": {
+    "id": "photo-ingest-rice-robot-page",
+    "image": "rice-robot-cajun-dirty-and-fried-rice.jpg",
+    "description": "Printed recipe page (Rice Robot style) containing two recipes on one photo. Primary test case for multi-recipe photo ingest.",
+    "expected_card_count": 2,
+    "notes": [
+      "Image contains TWO distinct recipes; ingest must split them into separate meal cards.",
+      "Rice Robot cup units should be preserved or normalized with a note that they are appliance cup measures.",
+      "User may confirm/edit after extraction (R3)."
+    ]
+  },
+  "meal_cards": [
+    {
+      "id": "seed-cajun-dirty-rice",
+      "title": "Cajun Dirty Rice",
+      "summary": "Rice cooker dirty rice with ground beef, bell pepper, Cajun seasoning, and beef broth. Good with hot sauce on the side.",
+      "source": "photo",
+      "source_image": "rice-robot-cajun-dirty-and-fried-rice.jpg",
+      "method_tags": ["rice-cooker", "one-pot"],
+      "style_tags": ["cajun", "southern", "rice-bowl"],
+      "servings": null,
+      "effort_minutes": null,
+      "ingredients": [
+        {
+          "name": "long grain white rice",
+          "quantity": 2,
+          "unit": "rice_robot_rice_cup",
+          "display": "2 Rice Robot Rice cups of long grain white rice"
+        },
+        {
+          "name": "beef broth",
+          "quantity": 2.5,
+          "unit": "rice_robot_water_cup",
+          "display": "2 1/2 Rice Robot Water cups of beef broth"
+        },
+        {
+          "name": "cooked ground beef",
+          "quantity": 0.5,
+          "unit": "cup",
+          "display": "1/2 cup cooked ground beef"
+        },
+        {
+          "name": "diced bell pepper",
+          "quantity": 0.5,
+          "unit": "cup",
+          "display": "1/2 cup diced bell pepper"
+        },
+        {
+          "name": "Cajun seasoning",
+          "quantity": 1,
+          "unit": "tablespoon",
+          "display": "1 tablespoon Cajun seasoning"
+        },
+        {
+          "name": "kosher salt",
+          "quantity": null,
+          "unit": null,
+          "display": "Kosher salt, to taste"
+        }
+      ],
+      "steps": [
+        "Rinse the rice thoroughly in a fine mesh sieve until the water runs clear.",
+        "Place the rice into the rice cooker, add the remaining ingredients and stir.",
+        "Close the lid and press the cook button."
+      ],
+      "blurb_from_source": "I love this dish with a bottle of hot sauce on the side to really kick it up."
+    },
+    {
+      "id": "seed-fried-rice",
+      "title": "Fried Rice",
+      "summary": "Rice cooker egg fried rice with jasmine rice, mixed vegetables, diced ham, eggs, and soy sauce.",
+      "source": "photo",
+      "source_image": "rice-robot-cajun-dirty-and-fried-rice.jpg",
+      "method_tags": ["rice-cooker", "one-pot"],
+      "style_tags": ["asian-inspired", "fried-rice", "rice-bowl"],
+      "servings": null,
+      "effort_minutes": null,
+      "ingredients": [
+        {
+          "name": "jasmine rice",
+          "quantity": 2,
+          "unit": "rice_robot_rice_cup",
+          "display": "2 Rice Robot Rice cups of Jasmine rice"
+        },
+        {
+          "name": "water",
+          "quantity": 2,
+          "unit": "rice_robot_water_cup",
+          "display": "2 Rice Robot Water cups of water"
+        },
+        {
+          "name": "large eggs",
+          "quantity": 2,
+          "unit": "count",
+          "display": "2 large eggs, beaten",
+          "prep": "beaten"
+        },
+        {
+          "name": "mixed vegetables",
+          "quantity": 1,
+          "unit": "cup",
+          "display": "1 cup fresh or frozen mixed vegetables, such as peas, carrots, and corn",
+          "notes": "fresh or frozen; e.g. peas, carrots, corn"
+        },
+        {
+          "name": "diced ham",
+          "quantity": 0.5,
+          "unit": "cup",
+          "display": "1/2 cup diced ham"
+        },
+        {
+          "name": "kosher salt",
+          "quantity": 0.5,
+          "unit": "teaspoon",
+          "display": "1/2 teaspoon kosher salt"
+        },
+        {
+          "name": "soy sauce",
+          "quantity": 2,
+          "unit": "tablespoon",
+          "display": "2 tablespoons soy sauce"
+        }
+      ],
+      "steps": [
+        "Rinse the rice thoroughly in a fine mesh sieve until the water runs clear.",
+        "Place the rice into the rice cooker, add the remaining ingredients and stir.",
+        "Close the lid and press the cook button. Fluff and stir to combine once cooked."
+      ],
+      "blurb_from_source": "Egg fried rice is one of my favorite dishes to make. I've cooked this dish on networks across the world from the Hallmark channel to the BBC. This is a fast track way to make it."
+    }
+  ]
+}
